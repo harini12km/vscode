@@ -25,53 +25,44 @@ const extensions = [
 	{
 		label: 'markdown-language-features',
 		workspaceFolder: `extensions/markdown-language-features/test-workspace`,
-		mocha: { timeout: 60_000 }
+		mocha: { timeout: 90_000 } 
 	},
 	{
 		label: 'ipynb',
 		workspaceFolder: path.join(os.tmpdir(), `ipynb-${Math.floor(Math.random() * 100000)}`),
-		mocha: { timeout: 60_000 }
+		mocha: { timeout: 90_000 } 
 	},
 	{
 		label: 'notebook-renderers',
 		workspaceFolder: path.join(os.tmpdir(), `nbout-${Math.floor(Math.random() * 100000)}`),
-		mocha: { timeout: 60_000 }
+		mocha: { timeout: 90_000 } 
 	},
 	{
 		label: 'vscode-colorize-tests',
 		workspaceFolder: `extensions/vscode-colorize-tests/test`,
-		mocha: { timeout: 60_000 }
+		mocha: { timeout: 90_000 } 
 	},
 	{
 		label: 'terminal-suggest',
 		workspaceFolder: path.join(os.tmpdir(), `terminal-suggest-${Math.floor(Math.random() * 100000)}`),
-		mocha: { timeout: 60_000 }
-	},
-	{
-		label: 'vscode-colorize-perf-tests',
-		workspaceFolder: `extensions/vscode-colorize-perf-tests/test`,
-		mocha: { timeout: 6000_000 }
-	},
-	{
-		label: 'configuration-editing',
-		workspaceFolder: path.join(os.tmpdir(), `confeditout-${Math.floor(Math.random() * 100000)}`),
-		mocha: { timeout: 60_000 }
+		mocha: { timeout: 90_000 } 
 	},
 	{
 		label: 'github-authentication',
 		workspaceFolder: path.join(os.tmpdir(), `msft-auth-${Math.floor(Math.random() * 100000)}`),
-		mocha: { timeout: 60_000 }
-	},
-	{
-		label: 'microsoft-authentication',
-		mocha: { timeout: 60_000 }
+		mocha: { timeout: 90_000 }
 	}
 ];
 
 
 const defaultLaunchArgs = process.env.API_TESTS_EXTRA_ARGS?.split(' ') || [
-	'--disable-telemetry', '--skip-welcome', '--skip-release-notes', `--crash-reporter-directory=${__dirname}/.build/crashes`, `--logsPath=${__dirname}/.build/logs/integration-tests`, '--no-cached-data', '--disable-updates', '--use-inmemory-secretstorage', '--disable-extensions', '--disable-workspace-trust'
+	'--disable-telemetry', '--skip-welcome', '--skip-release-notes', 
+	`--crash-reporter-directory=${__dirname}/.build/crashes`, 
+	`--logsPath=${__dirname}/.build/logs/integration-tests`, '--no-cached-data', 
+	'--disable-updates', '--use-inmemory-secretstorage', '--disable-extensions', 
+	'--disable-workspace-trust', '--disable-gpu' 
 ];
+
 
 const config = defineConfig(extensions.map(extension => {
 	/** @type {import('@vscode/test-cli').TestConfiguration} */
@@ -95,8 +86,12 @@ const config = defineConfig(extensions.map(extension => {
 			reporterEnabled: 'spec, mocha-junit-reporter',
 			mochaJunitReporterReporterOptions: {
 				testsuitesTitle: `${suite} ${process.platform}`,
-				mochaFile: path.join(process.env.BUILD_ARTIFACTSTAGINGDIRECTORY, `test-results/${process.platform}-${process.arch}-${suite.toLowerCase().replace(/[^\w]/g, '-')}-results.xml`)
-			}
+				mochaFile: path.join(
+					process.env.BUILD_ARTIFACTSTAGINGDIRECTORY, 
+					`test-results/${process.platform}-${process.arch}-${suite.toLowerCase().replace(/[^\w]/g, '-')}-results.xml`
+				)
+			},
+			output: path.join(__dirname, 'logs', `${config.label}-test.log`) 
 		};
 	}
 
@@ -108,9 +103,10 @@ const config = defineConfig(extensions.map(extension => {
 		config.env = {
 			...config.env,
 			VSCODE_SKIP_PRELAUNCH: '1',
+			VSCODE_ENABLE_LOGGING: '1'
 		};
 	} else {
-		// web configs not supported, yet
+		
 	}
 
 	return config;

@@ -6,24 +6,23 @@ These are VS Code coding guidelines. Please also review our [Source Code Organis
 
 ## Indentation
 
-We use tabs, not spaces.
+We use tabs, not spaces, for indentation to ensure consistency and ease of navigation.
 
 ## Naming Conventions
 
-* Use PascalCase for `type` names
-* Use PascalCase for `enum` values
-* Use camelCase for `function` and `method` names
-* Use camelCase for `property` names and `local variables`
-* Use whole words in names when possible
+Use PascalCase for type names and enum values.
+Use camelCase for function, method, property names, and local variables.
+Use whole words in names whenever possible to improve readability.
 
 ## Types
 
-* Do not export `types` or `functions` unless you need to share it across multiple components
-* Do not introduce new `types` or `values` to the global namespace
+Export types or functions only when necessary to share across multiple components.
+Avoid introducing new types or values to the global namespace.
 
 ## Comments
 
-* When there are comments for `functions`, `interfaces`, `enums`, and `classes` use JSDoc style comments
+When documenting functions, interfaces, enums, and classes, use JSDoc-style comments.
+Keep comments concise and informative.
 
 ## Strings
 
@@ -53,5 +52,7 @@ for (let i = 0, n = str.length; i < 10; i++) {
     }
 }
 
-function f(x: number, y: string): void { }
+function f(x: number, y: string): void {
+console.log(`${x} - ${y}`);
+ }
 ```
